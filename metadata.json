@@ -1,0 +1,6 @@
+{
+  "name": "Sigma Pepe",
+  "description": "Sigma Pepe community challenge and leaderboard platform integrated with Firebase Authentication and Analytics tracking, featuring 1-second instant login.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

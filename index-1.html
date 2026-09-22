@@ -1,0 +1,1347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sigma Pepe - Full Standalone Arena (index.html)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.04); }
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #111;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #333;
+      border-radius: 4px;
+    }
+    .perspective-stage {
+      perspective: 1000px;
+    }
+  </style>
+</head>
+<body class="bg-black text-white antialiased min-h-screen selection:bg-amber-400 selection:text-black">
+
+  <!-- Embedded Live Data Snapshot (Owner + User Data) -->
+  <script id="sigma-data-seed" type="application/json">
+{
+  "users": [
+    {
+      "id": "u_owner_master",
+      "email": "yachinhussain6@gmail.com",
+      "passwordHash": "master_owner",
+      "profile": {
+        "id": "u_owner_master",
+        "username": "MasterOwner",
+        "country": "Global",
+        "avatar_url": "https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg",
+        "created_at": "2026-09-22T00:00:00.000Z",
+        "username_locked": true,
+        "country_locked": true
+      }
+    },
+    {
+      "id": "u_sigma_king",
+      "email": "sigmagrindset@pepe.io",
+      "passwordHash": "demo",
+      "profile": {
+        "id": "u_sigma_king",
+        "username": "SigmaGrindset",
+        "country": "United States",
+        "avatar_url": "https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg",
+        "created_at": "2026-09-20T00:00:00.000Z",
+        "username_locked": true,
+        "country_locked": true
+      }
+    },
+    {
+      "id": "u_pepe_wise",
+      "email": "pepethewise@pepe.io",
+      "passwordHash": "demo",
+      "profile": {
+        "id": "u_pepe_wise",
+        "username": "PepeTheWise",
+        "country": "Japan",
+        "avatar_url": "https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg",
+        "created_at": "2026-09-20T00:00:00.000Z",
+        "username_locked": true,
+        "country_locked": true
+      }
+    },
+    {
+      "id": "u_shadow_lord",
+      "email": "shadowarchitect@pepe.io",
+      "passwordHash": "demo",
+      "profile": {
+        "id": "u_shadow_lord",
+        "username": "ShadowArchitect",
+        "country": "Germany",
+        "avatar_url": "https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg",
+        "created_at": "2026-09-20T00:00:00.000Z",
+        "username_locked": true,
+        "country_locked": true
+      }
+    }
+  ],
+  "challenges": [
+    {
+      "id": "c1",
+      "question": "When the whole world doubts your vision, what is your ultimate Sigma move?",
+      "created_at": "2026-09-22T00:00:00.000Z",
+      "topic": "Daily Sigma Grind"
+    }
+  ],
+  "answers": [
+    {
+      "id": "a_seed_1",
+      "user_id": "u_shadow_lord",
+      "challenge_id": "c1",
+      "answer_text": "I smile in silence, let my results make the noise, and buy the company.",
+      "created_at": "2026-09-22T02:15:00.000Z",
+      "profiles": {
+        "username": "ShadowArchitect",
+        "country": "Germany",
+        "avatar_url": "https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg"
+      }
+    },
+    {
+      "id": "a_seed_2",
+      "user_id": "u_sigma_king",
+      "challenge_id": "c1",
+      "answer_text": "Never explain. Never complain. Just double the output and stay disciplined.",
+      "created_at": "2026-09-22T03:30:00.000Z",
+      "profiles": {
+        "username": "SigmaGrindset",
+        "country": "United States",
+        "avatar_url": "https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg"
+      }
+    }
+  ],
+  "votes": [
+    { "id": "v1", "answer_id": "a_seed_1", "user_id": "u_sigma_king", "vote_type": "sigma" },
+    { "id": "v2", "answer_id": "a_seed_1", "user_id": "u_pepe_wise", "vote_type": "smart" },
+    { "id": "v3", "answer_id": "a_seed_2", "user_id": "u_shadow_lord", "vote_type": "sigma" }
+  ],
+  "ownerEmails": [
+    "yachinhussain6@gmail.com"
+  ],
+  "dailyWinner": {
+    "id": "winner_today",
+    "display_name": "Shadow",
+    "username": "shadow_sigma",
+    "score": 9842,
+    "avatar_url": "https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg",
+    "winning_answer": "I don't chase opportunities… opportunities chase me.",
+    "announced_at": "2026-09-22T00:00:00.000Z"
+  }
+}
+  </script>
+
+  <div id="app" class="max-w-xl mx-auto px-4 py-6 pb-28 space-y-4">
+    <!-- Main Header -->
+    <header class="text-center pt-2 pb-1 relative">
+      <div class="text-4xl select-none inline-block hover:scale-110 transition cursor-default">🐸</div>
+      <h1 class="text-3xl font-black tracking-widest text-white mt-1">SIGMA PEPE</h1>
+      <p class="text-[11px] font-bold tracking-widest text-amber-400 uppercase mt-0.5">
+        ⚡ COMPLETE STANDALONE ARENA • OWNER & USER EDITION ⚡
+      </p>
+
+      <!-- Active User Bar / Switcher -->
+      <div id="user-status-bar" class="mt-3 p-2 rounded-xl bg-neutral-900/80 border border-neutral-800 flex items-center justify-between text-xs">
+        <!-- Injected via JS -->
+      </div>
+    </header>
+
+    <!-- 12:00 AM Countdown / Midnight Result Banner -->
+    <div id="midnight-banner-container"></div>
+
+    <!-- Main Navigation Tabs -->
+    <div class="grid grid-cols-4 gap-1 p-1 rounded-2xl bg-neutral-900 border border-neutral-800 sticky top-3 z-30 shadow-xl backdrop-blur-md">
+      <button onclick="switchTab('arena')" id="tab-btn-arena" class="py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition">
+        <span>💬</span>
+        <span>Arena</span>
+      </button>
+      <button onclick="switchTab('leaderboard')" id="tab-btn-leaderboard" class="py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition">
+        <span>🏆</span>
+        <span>Ranks</span>
+      </button>
+      <button onclick="switchTab('profile')" id="tab-btn-profile" class="py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition">
+        <span>👤</span>
+        <span>Profile</span>
+      </button>
+      <button onclick="switchTab('owner')" id="tab-btn-owner" class="py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition">
+        <span>👑</span>
+        <span>Owner</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: ARENA (COMMUNITY) -->
+    <div id="tab-view-arena" class="space-y-4">
+      <!-- Active Challenge Card -->
+      <div class="p-5 rounded-2xl bg-neutral-900 border border-neutral-800 space-y-3 shadow-lg">
+        <div class="flex items-center justify-between text-xs text-neutral-400">
+          <span class="px-2.5 py-0.5 rounded-full bg-amber-400/10 text-amber-300 border border-amber-400/30 font-mono text-[10px] font-bold">
+            #01 TODAY'S QUESTION
+          </span>
+          <span class="text-neutral-400 text-[11px] font-medium" id="challenge-countdown-label">
+            Expires at 12:00 AM
+          </span>
+        </div>
+
+        <h2 class="text-lg md:text-xl font-black text-white leading-snug" id="challenge-question-text">
+          Loading question...
+        </h2>
+
+        <div class="pt-2 border-t border-neutral-800">
+          <label class="block text-[11px] font-bold text-neutral-400 uppercase tracking-wider mb-1.5">
+            Post Your Answer (+10 Pts)
+          </label>
+          <textarea
+            id="answer-input"
+            rows="2"
+            placeholder="Type your sharpest Sigma response..."
+            class="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-3 text-xs text-white outline-none focus:border-amber-400 transition"
+          ></textarea>
+          <button
+            onclick="handlePostAnswer()"
+            class="w-full mt-2 py-2.5 bg-white hover:bg-neutral-200 active:scale-[0.98] text-black font-black rounded-xl text-xs uppercase tracking-wider transition cursor-pointer shadow-md"
+          >
+            Post Answer (+10 Pts)
+          </button>
+        </div>
+      </div>
+
+      <!-- Live Answers Feed -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between px-1">
+          <h3 class="text-xs font-black uppercase tracking-wider text-neutral-400">
+            Live Arena Answers (<span id="answers-count">0</span>)
+          </h3>
+          <span class="text-[10px] text-amber-400 font-bold">1 VOTE PER USER RULE</span>
+        </div>
+        <div id="answers-list" class="space-y-3">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: LEADERBOARD -->
+    <div id="tab-view-leaderboard" class="hidden space-y-4">
+      <div class="p-4 rounded-2xl bg-neutral-900 border border-neutral-800">
+        <div class="flex items-center justify-between pb-3 border-b border-neutral-800">
+          <div>
+            <h2 class="text-base font-black text-white uppercase tracking-wide">🏆 Global Sigma Leaderboard</h2>
+            <p class="text-[11px] text-neutral-400">Real-time ranks calculated from community votes</p>
+          </div>
+          <span class="text-xs font-mono font-bold text-amber-400 px-2 py-1 bg-amber-400/10 border border-amber-400/30 rounded-lg">LIVE</span>
+        </div>
+        <div id="leaderboard-list" class="divide-y divide-neutral-800/80 mt-2">
+          <!-- Injected via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: PROFILE -->
+    <div id="tab-view-profile" class="hidden space-y-4">
+      <div class="p-5 rounded-2xl bg-neutral-900 border border-neutral-800 space-y-4">
+        <div class="flex items-center gap-3">
+          <img id="profile-avatar" src="" alt="Avatar" class="w-16 h-16 rounded-2xl object-cover border-2 border-amber-400 shadow-md" />
+          <div>
+            <h2 id="profile-username" class="text-lg font-black text-white">@username</h2>
+            <p id="profile-country" class="text-xs text-neutral-400 mt-0.5">Country</p>
+            <span id="profile-role-badge" class="inline-block mt-1 text-[10px] font-black uppercase px-2 py-0.5 rounded bg-amber-400 text-black">
+              MEMBER
+            </span>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-2 border-t border-neutral-800 text-center">
+          <div class="p-3 rounded-xl bg-neutral-950 border border-neutral-800">
+            <span class="text-[10px] font-bold text-neutral-400 uppercase block">Total Points</span>
+            <span id="profile-score" class="text-2xl font-black text-amber-400 mt-1 block">0</span>
+          </div>
+          <div class="p-3 rounded-xl bg-neutral-950 border border-neutral-800">
+            <span class="text-[10px] font-bold text-neutral-400 uppercase block">Answers Posted</span>
+            <span id="profile-answers-count" class="text-2xl font-black text-white mt-1 block">0</span>
+          </div>
+        </div>
+
+        <!-- Rule Notice -->
+        <div class="p-3 rounded-xl bg-neutral-950 border border-neutral-800/80 text-[11px] text-neutral-400 space-y-1">
+          <span class="text-amber-400 font-bold block">🔒 Sigma Rules:</span>
+          <p>• Username & country are locked permanently upon creation.</p>
+          <p>• Daily Winner is announced automatically every night at 12:00 AM.</p>
+        </div>
+
+        <!-- Switch Current User / Fast Login -->
+        <div class="pt-3 border-t border-neutral-800 space-y-2">
+          <label class="text-xs font-bold text-white block">Switch Active User Account</label>
+          <select id="user-switch-select" onchange="handleSwitchUser(this.value)" class="w-full bg-neutral-950 border border-neutral-700 rounded-xl p-2.5 text-xs text-white outline-none focus:border-amber-400">
+            <!-- Injected via JS -->
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: OWNER PANEL -->
+    <div id="tab-view-owner" class="hidden space-y-4">
+      <div class="p-5 rounded-2xl bg-neutral-900 border-2 border-amber-500/60 space-y-5 shadow-2xl">
+        <div class="flex items-center justify-between pb-3 border-b border-neutral-800">
+          <div class="flex items-center gap-2">
+            <span class="p-1.5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/40">👑</span>
+            <div>
+              <h2 class="text-base font-black text-white uppercase tracking-wide">Owner Control Room</h2>
+              <p class="text-[11px] text-amber-300 font-mono">yachinhussain6@gmail.com (Master Authority)</p>
+            </div>
+          </div>
+          <button onclick="openCeremony()" class="px-3 py-1.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-black font-black text-xs uppercase tracking-wider rounded-xl shadow cursor-pointer transition">
+            🌙 Ceremony
+          </button>
+        </div>
+
+        <!-- Owner Subtabs -->
+        <div class="grid grid-cols-4 gap-1 p-1 rounded-xl bg-neutral-950 border border-neutral-800 text-[11px] font-bold">
+          <button onclick="switchOwnerSubtab('users')" id="owner-subtab-users" class="py-1.5 rounded-lg bg-amber-400 text-black">Scores</button>
+          <button onclick="switchOwnerSubtab('coowners')" id="owner-subtab-coowners" class="py-1.5 rounded-lg text-neutral-400">Co-Owners</button>
+          <button onclick="switchOwnerSubtab('challenge')" id="owner-subtab-challenge" class="py-1.5 rounded-lg text-neutral-400">Question</button>
+          <button onclick="switchOwnerSubtab('winner')" id="owner-subtab-winner" class="py-1.5 rounded-lg text-neutral-400">Winner</button>
+        </div>
+
+        <!-- Subtab 1: Users & Points Modifier -->
+        <div id="owner-panel-users" class="space-y-3">
+          <span class="text-xs font-bold text-neutral-300 block">Manage Gladiator Points (+50 / -50)</span>
+          <div id="owner-users-table" class="space-y-2 max-h-72 overflow-y-auto pr-1 custom-scrollbar">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+
+        <!-- Subtab 2: Co-Owners -->
+        <div id="owner-panel-coowners" class="hidden space-y-3">
+          <span class="text-xs font-bold text-neutral-300 block">Authorized Co-Owners List</span>
+          <div id="coowners-list" class="space-y-1.5">
+            <!-- Injected via JS -->
+          </div>
+          <div class="pt-2 flex gap-2">
+            <input id="new-coowner-email" type="email" placeholder="new.coowner@gmail.com" class="flex-1 bg-neutral-950 border border-neutral-800 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-amber-400" />
+            <button onclick="handleAddCoOwner()" class="px-3.5 py-2 bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs rounded-xl cursor-pointer">
+              Add Co-Owner
+            </button>
+          </div>
+        </div>
+
+        <!-- Subtab 3: Daily Challenge -->
+        <div id="owner-panel-challenge" class="hidden space-y-3">
+          <span class="text-xs font-bold text-neutral-300 block">Update Daily Challenge Question</span>
+          <textarea id="edit-challenge-text" rows="3" class="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-3 text-xs text-white outline-none focus:border-amber-400"></textarea>
+          <button onclick="handleSaveChallenge()" class="w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-black font-bold text-xs rounded-xl uppercase tracking-wider cursor-pointer">
+            Publish New Question
+          </button>
+        </div>
+
+        <!-- Subtab 4: Midnight Winner -->
+        <div id="owner-panel-winner" class="hidden space-y-3">
+          <span class="text-xs font-bold text-neutral-300 block">12:00 AM Midnight Winner Setup</span>
+          <div class="space-y-2 text-xs">
+            <div>
+              <label class="text-[11px] text-neutral-400 block mb-1">Pick Registered User</label>
+              <select id="winner-select-user" onchange="handleSelectWinnerPreset(this.value)" class="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2 text-white text-xs">
+                <!-- Injected via JS -->
+              </select>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-[11px] text-neutral-400 block mb-1">Display Name</label>
+                <input id="winner-name" type="text" class="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2 text-white text-xs" />
+              </div>
+              <div>
+                <label class="text-[11px] text-neutral-400 block mb-1">Username (@)</label>
+                <input id="winner-username" type="text" class="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2 text-white text-xs" />
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="text-[11px] text-neutral-400 block mb-1">Score</label>
+                <input id="winner-score" type="number" class="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2 text-white text-xs" />
+              </div>
+              <div>
+                <label class="text-[11px] text-neutral-400 block mb-1">Avatar / Image URL</label>
+                <input id="winner-image" type="text" class="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2 text-white text-xs" />
+              </div>
+            </div>
+            <div>
+              <label class="text-[11px] text-neutral-400 block mb-1">Winning Quote</label>
+              <input id="winner-quote" type="text" class="w-full bg-neutral-950 border border-neutral-800 rounded-xl p-2 text-white text-xs" />
+            </div>
+            <div class="flex gap-2 pt-2">
+              <button onclick="handleSaveWinner()" class="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-black font-black text-xs uppercase rounded-xl cursor-pointer">
+                Save & Declare Winner
+              </button>
+              <button onclick="toggleForceMidnight()" class="px-3 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-amber-300 font-bold text-xs rounded-xl cursor-pointer">
+                Toggle Midnight Mode
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Backup & Reset Data -->
+        <div class="p-3 rounded-xl bg-neutral-950 border border-neutral-800 flex items-center justify-between text-xs">
+          <span class="text-neutral-400">Offline Standalone Storage:</span>
+          <div class="flex gap-2">
+            <button onclick="exportStateJson()" class="px-2.5 py-1 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-neutral-200 text-[11px] font-bold cursor-pointer">
+              Export JSON
+            </button>
+            <button onclick="resetToInitialData()" class="px-2.5 py-1 rounded-lg bg-neutral-800 hover:bg-neutral-700 text-amber-400 text-[11px] font-bold cursor-pointer">
+              Reset Snapshot
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12:00 AM Midnight Ceremony Modal Overlay -->
+  <div id="ceremony-modal" class="fixed inset-0 z-50 hidden bg-black select-none flex items-center justify-center overflow-hidden" style="background: radial-gradient(circle at 50% 45%, #151515, #000000 75%);">
+    <!-- Top Controls -->
+    <div class="absolute top-4 left-4 right-4 z-40 flex items-center justify-between">
+      <button onclick="playCeremonySequence()" class="px-3.5 py-1.5 rounded-full bg-neutral-900 border border-neutral-700 text-xs font-bold text-amber-400 hover:bg-neutral-800 cursor-pointer shadow-md">
+        🔄 Replay
+      </button>
+      <button onclick="closeCeremony()" class="p-2.5 rounded-full bg-neutral-900 border border-neutral-700 text-white font-bold hover:bg-neutral-800 cursor-pointer shadow-md">
+        ✕
+      </button>
+    </div>
+
+    <!-- Header -->
+    <div class="absolute top-8 left-1/2 -translate-x-1/2 text-center z-30 pointer-events-none">
+      <div class="text-xs font-bold text-neutral-400 tracking-wider">🌙 12:00 AM 🌙</div>
+      <div class="text-xl md:text-2xl font-black text-amber-400 tracking-widest mt-1 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]">
+        ⚡ RESULT TIME ⚡
+      </div>
+    </div>
+
+    <!-- Stage Arena -->
+    <div class="relative w-full h-full flex items-center justify-center perspective-stage">
+      <!-- The Gate -->
+      <div id="gate" class="absolute w-[240px] md:w-[260px] h-[340px] md:h-[370px] -translate-y-8" style="border: 4px solid #777; border-bottom: none; border-radius: 130px 130px 0 0; box-shadow: 0 0 45px rgba(255,255,255,0.15);">
+        <div id="door-left" class="absolute top-0 left-0 w-1/2 h-full bg-[#080808] border-3 border-[#444] origin-left transition-transform duration-[1500ms]" style="border-radius: 125px 0 0 0;"></div>
+        <div id="door-right" class="absolute top-0 right-0 w-1/2 h-full bg-[#080808] border-3 border-[#444] origin-right transition-transform duration-[1500ms]" style="border-radius: 0 125px 0 0;"></div>
+      </div>
+
+      <!-- Portal Glow -->
+      <div id="portal-glow" class="absolute w-[170px] md:w-[185px] h-[250px] md:h-[270px] -translate-y-8 rounded-t-[100px] opacity-0 scale-95 transition-all duration-[1200ms] pointer-events-none" style="background: radial-gradient(circle, #fff, #777 18%, #222 48%, #000 75%);"></div>
+
+      <!-- Demon Character -->
+      <img id="demon-img" src="https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg" alt="Demon" class="absolute z-10 w-[260px] md:w-[290px] max-h-[350px] object-contain opacity-0 translate-y-[180px] scale-[0.55] transition-all duration-[1800ms] pointer-events-none" style="filter: drop-shadow(0 0 30px rgba(255,255,255,0.25));" />
+
+      <!-- Diamond Burst -->
+      <div id="diamond" class="absolute z-20 text-6xl md:text-7xl opacity-0 scale-[0.1] -rotate-[30deg] transition-all duration-[1200ms] pointer-events-none" style="text-shadow: 0 0 30px #ffffff, 0 0 70px #f59e0b;">
+        💎
+      </div>
+
+      <!-- Winner Showcase Card -->
+      <div id="winner-card" class="absolute z-30 bottom-5 left-1/2 -translate-x-1/2 w-[min(420px,92vw)] p-4 md:p-5 rounded-3xl border border-neutral-600/80 text-center opacity-0 translate-y-[140%] transition-all duration-[1200ms]" style="background: linear-gradient(145deg, #181818, #070707); box-shadow: 0 20px 70px #000, 0 0 35px rgba(255,255,255,0.08);">
+        <div class="relative inline-block">
+          <img id="ceremony-winner-avatar" src="https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg" alt="Winner" class="w-16 h-16 rounded-full object-cover border-2 border-amber-400 mx-auto shadow-md" />
+          <span class="absolute -bottom-1 -right-1 text-base">👑</span>
+        </div>
+        <div id="ceremony-winner-name" class="text-xl font-black text-white mt-1.5">🐸 Shadow</div>
+        <div id="ceremony-winner-username" class="text-xs text-neutral-400 font-mono">@shadow_sigma</div>
+
+        <div class="inline-block my-2 px-3 py-1 rounded-full border border-amber-400/80 bg-amber-400/10 text-amber-300 font-black text-[11px] uppercase tracking-wider">
+          👑 SIGMA OF THE DAY
+        </div>
+
+        <div class="text-2xl font-black text-emerald-400 tracking-tight">
+          <span id="ceremony-winner-score">9,842</span> <span class="text-xs text-neutral-400">PTS</span>
+        </div>
+
+        <p id="ceremony-winner-quote" class="text-xs italic text-neutral-300 mt-2 px-2 border-t border-neutral-800/80 pt-2 line-clamp-2">
+          &ldquo;I don't chase opportunities… opportunities chase me.&rdquo;
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // -------------------------------------------------------------
+    // 1. STATE MANAGEMENT WITH EMBEDDED DATA & LOCALSTORAGE
+    // -------------------------------------------------------------
+    const STORAGE_KEY = 'sigma_pepe_standalone_db_v3';
+    const seedEl = document.getElementById('sigma-data-seed');
+    const initialSnapshot = JSON.parse(seedEl.textContent || '{}');
+
+    function loadState() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) return JSON.parse(saved);
+      } catch (e) {
+        console.warn('LocalStorage read error:', e);
+      }
+      return { ...initialSnapshot };
+    }
+
+    let state = loadState();
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      } catch (e) {
+        console.warn('LocalStorage save error:', e);
+      }
+      renderAll();
+    }
+
+    function resetToInitialData() {
+      if (confirm('Reset standalone database back to original snapshot from download?')) {
+        state = { ...initialSnapshot };
+        saveState();
+        alert('Database restored!');
+      }
+    }
+
+    function exportStateJson() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'sigma-pepe-data-backup.json';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Ensure Master Owner is in ownerEmails
+    const MASTER_EMAIL = 'yachinhussain6@gmail.com';
+    if (!state.ownerEmails) state.ownerEmails = [MASTER_EMAIL];
+    if (!state.ownerEmails.map(e => e.toLowerCase()).includes(MASTER_EMAIL)) {
+      state.ownerEmails.unshift(MASTER_EMAIL);
+    }
+
+    // Current active user
+    let currentUserId = state.currentUser ? state.currentUser.id : (state.users && state.users[0] ? state.users[0].id : null);
+    function getCurrentUser() {
+      return (state.users || []).find(u => u.id === currentUserId) || state.users[0];
+    }
+    function isCurrentUserOwner() {
+      const u = getCurrentUser();
+      if (!u || !u.email) return false;
+      return (state.ownerEmails || []).map(e => e.toLowerCase()).includes(u.email.toLowerCase());
+    }
+
+    // -------------------------------------------------------------
+    // 2. AUDIO SYNTHESIZER (Web Audio API - 0% external assets)
+    // -------------------------------------------------------------
+    let audioCtx = null;
+    function initAudio() {
+      try {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) audioCtx = new AudioContextClass();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+      } catch (e) {}
+    }
+
+    function playTone(freq, start, dur, type = 'sine', gain = 0.16) {
+      if (!audioCtx) return;
+      try {
+        const o = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        o.type = type;
+        o.frequency.setValueAtTime(freq, audioCtx.currentTime + start);
+        g.gain.setValueAtTime(0, audioCtx.currentTime + start);
+        g.gain.linearRampToValueAtTime(gain, audioCtx.currentTime + start + 0.03);
+        g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + start + dur);
+        o.connect(g);
+        o.connect(audioCtx.destination);
+        o.start(audioCtx.currentTime + start);
+        o.stop(audioCtx.currentTime + start + dur + 0.05);
+      } catch (e) {}
+    }
+
+    // -------------------------------------------------------------
+    // 3. 12:00 AM CEREMONY ANIMATION SEQUENCE
+    // -------------------------------------------------------------
+    let ceremonyTimeouts = [];
+    function openCeremony() {
+      initAudio();
+      document.getElementById('ceremony-modal').classList.remove('hidden');
+      playCeremonySequence();
+    }
+
+    function closeCeremony() {
+      ceremonyTimeouts.forEach(clearTimeout);
+      ceremonyTimeouts = [];
+      document.getElementById('ceremony-modal').classList.add('hidden');
+    }
+
+    function playCeremonySequence() {
+      ceremonyTimeouts.forEach(clearTimeout);
+      ceremonyTimeouts = [];
+
+      const winner = state.dailyWinner || {
+        display_name: 'Shadow',
+        username: 'shadow_sigma',
+        score: 9842,
+        winning_answer: 'I do not chase opportunities... opportunities chase me.',
+        avatar_url: 'https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg'
+      };
+
+      document.getElementById('ceremony-winner-name').textContent = '🐸 ' + (winner.display_name || winner.username);
+      document.getElementById('ceremony-winner-username').textContent = '@' + winner.username;
+      document.getElementById('ceremony-winner-score').textContent = Number(winner.score || 0).toLocaleString();
+      document.getElementById('ceremony-winner-quote').textContent = '“' + (winner.winning_answer || '') + '”';
+      if (winner.avatar_url) {
+        document.getElementById('ceremony-winner-avatar').src = winner.avatar_url;
+      }
+
+      const doorLeft = document.getElementById('door-left');
+      const doorRight = document.getElementById('door-right');
+      const portal = document.getElementById('portal-glow');
+      const demon = document.getElementById('demon-img');
+      const diamond = document.getElementById('diamond');
+      const card = document.getElementById('winner-card');
+
+      // Reset
+      doorLeft.style.transform = 'perspective(800px) rotateY(0deg)';
+      doorRight.style.transform = 'perspective(800px) rotateY(0deg)';
+      portal.style.opacity = '0';
+      portal.style.transform = 'scale(0.95)';
+      demon.style.opacity = '0';
+      demon.style.transform = 'translateY(180px) scale(0.55)';
+      diamond.style.opacity = '0';
+      diamond.style.transform = 'scale(0.1) rotate(-30deg)';
+      card.style.opacity = '0';
+      card.style.transform = 'translate(-50%, 140%)';
+
+      // 1. Bass drone
+      playTone(55, 0, 3.5, 'sawtooth', 0.04);
+      playTone(110, 0, 4.0, 'sine', 0.08);
+
+      // 2. Open gate (150ms)
+      ceremonyTimeouts.push(setTimeout(() => {
+        doorLeft.style.transform = 'perspective(800px) rotateY(-80deg)';
+        doorRight.style.transform = 'perspective(800px) rotateY(80deg)';
+        playTone(70, 0, 1.4, 'sawtooth', 0.12);
+      }, 150));
+
+      // 3. Portal glow (700ms)
+      ceremonyTimeouts.push(setTimeout(() => {
+        portal.style.opacity = '1';
+        portal.style.transform = 'scale(1.05)';
+      }, 700));
+
+      // 4. Demon rise (1200ms)
+      ceremonyTimeouts.push(setTimeout(() => {
+        demon.style.opacity = '1';
+        demon.style.transform = 'translateY(-15px) scale(1.0)';
+        playTone(45, 0, 1.5, 'sawtooth', 0.18);
+        playTone(90, 0.2, 1.1, 'square', 0.06);
+      }, 1200));
+
+      // 5. Diamond blast (2300ms)
+      ceremonyTimeouts.push(setTimeout(() => {
+        diamond.style.opacity = '1';
+        diamond.style.transform = 'scale(1.35) rotate(0deg)';
+        playTone(523.25, 0, 0.35, 'sine', 0.18);
+        playTone(783.99, 0.12, 0.55, 'sine', 0.15);
+        playTone(1046.5, 0.25, 0.8, 'sine', 0.12);
+      }, 2300));
+
+      // 6. Winner card slide in (3400ms)
+      ceremonyTimeouts.push(setTimeout(() => {
+        card.style.opacity = '1';
+        card.style.transform = 'translate(-50%, 0)';
+        [261.63, 329.63, 392, 523.25, 659.25].forEach((f, i) => {
+          playTone(f, i * 0.13, 0.75, 'triangle', 0.12);
+        });
+      }, 3400));
+    }
+
+    // -------------------------------------------------------------
+    // 4. 12:00 AM COUNTDOWN & MIDNIGHT BANNER AUTOMATION
+    // -------------------------------------------------------------
+    let forceMidnightActive = false;
+    let autoTriggeredMidnight = false;
+
+    function toggleForceMidnight() {
+      forceMidnightActive = !forceMidnightActive;
+      updateMidnightBanner();
+      alert(forceMidnightActive ? '⚡ Midnight Mode FORCED ON!' : '⏳ Restored daytime countdown mode.');
+    }
+
+    function updateMidnightBanner() {
+      const banner = document.getElementById('midnight-banner-container');
+      if (!banner) return;
+
+      const now = new Date();
+      const isMidnightNow = now.getHours() === 0;
+
+      // Calculate time until next midnight
+      const nextMidnight = new Date(now);
+      nextMidnight.setHours(24, 0, 0, 0);
+      const diffSec = Math.max(0, Math.floor((nextMidnight.getTime() - now.getTime()) / 1000));
+      const h = String(Math.floor(diffSec / 3600)).padStart(2, '0');
+      const m = String(Math.floor((diffSec % 3600) / 60)).padStart(2, '0');
+      const s = String(diffSec % 60).padStart(2, '0');
+
+      // Auto trigger at 12:00 AM
+      if (isMidnightNow && !autoTriggeredMidnight) {
+        autoTriggeredMidnight = true;
+        openCeremony();
+      }
+
+      const winner = state.dailyWinner || { username: 'shadow_sigma' };
+      const isOwner = isCurrentUserOwner();
+
+      if (isMidnightNow || forceMidnightActive) {
+        banner.innerHTML = `
+          <button onclick="openCeremony()" class="w-full p-3.5 rounded-2xl bg-gradient-to-r from-amber-500/20 via-neutral-900 to-amber-500/20 border border-amber-500/50 hover:border-amber-400 flex items-center justify-between gap-3 text-left transition shadow-lg cursor-pointer">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="p-2 rounded-xl bg-amber-400/10 text-amber-400 border border-amber-400/30 shrink-0">
+                🌙
+              </span>
+              <div class="min-w-0">
+                <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-amber-400 text-black">
+                  🌙 MIDNIGHT RESULT
+                </span>
+                <p class="text-xs font-bold text-white truncate mt-1">
+                  Winner: <span class="text-amber-300">@${winner.username}</span>
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-1 px-3 py-1.5 rounded-xl bg-amber-400 text-black font-black text-xs uppercase tracking-wider shrink-0 shadow">
+              ✨ Watch
+            </div>
+          </button>
+        `;
+      } else {
+        banner.innerHTML = `
+          <div class="p-3 rounded-2xl bg-gradient-to-r from-neutral-900 via-neutral-950 to-neutral-900 border border-neutral-800 flex items-center justify-between gap-3 shadow-lg">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <span class="p-2 rounded-xl bg-amber-400/10 text-amber-400 border border-amber-400/20 shrink-0">
+                ⏳
+              </span>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-neutral-800 text-amber-400 border border-amber-400/30">
+                    🌙 12:00 AM RESULT
+                  </span>
+                  <span class="text-[10px] text-neutral-400 font-semibold hidden sm:inline">
+                    VOTING LIVE
+                  </span>
+                </div>
+                <p class="text-xs font-semibold text-neutral-300 truncate mt-0.5">
+                  Winner announced in <span class="font-mono text-amber-300 font-bold">${h}:${m}:${s}</span>
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <div class="px-2.5 py-1.5 rounded-xl bg-neutral-900 border border-neutral-800 text-amber-300 font-mono font-black text-xs">
+                ${h}:${m}:${s}
+              </div>
+              ${isOwner ? `
+                <button onclick="openCeremony()" class="px-2.5 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-black font-black text-[11px] uppercase tracking-wider cursor-pointer">
+                  Preview
+                </button>
+              ` : ''}
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // -------------------------------------------------------------
+    // 5. RENDERING (Arena, Leaderboard, Profile, Owner Panel)
+    // -------------------------------------------------------------
+    function renderAll() {
+      renderUserStatusBar();
+      renderChallenge();
+      renderAnswers();
+      renderLeaderboard();
+      renderProfile();
+      renderOwnerPanel();
+      updateMidnightBanner();
+    }
+
+    function renderUserStatusBar() {
+      const u = getCurrentUser();
+      const isOwner = isCurrentUserOwner();
+      const bar = document.getElementById('user-status-bar');
+      if (!u || !bar) return;
+
+      bar.innerHTML = `
+        <div class="flex items-center gap-2 min-w-0">
+          <img src="${u.profile ? u.profile.avatar_url : 'https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg'}" class="w-6 h-6 rounded-full object-cover border border-amber-400 shrink-0" />
+          <div class="min-w-0 truncate">
+            <span class="font-black text-white">@${u.profile ? u.profile.username : 'User'}</span>
+            <span class="text-neutral-400 text-[10px] ml-1">(${u.profile ? u.profile.country : 'Global'})</span>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 shrink-0">
+          <span class="text-[10px] font-black uppercase px-2 py-0.5 rounded ${isOwner ? 'bg-amber-400 text-black' : 'bg-neutral-800 text-amber-300'}">
+            ${isOwner ? '👑 MASTER OWNER' : '⚔️ GLADIATOR'}
+          </span>
+          <button onclick="switchTab('profile')" class="text-[10px] font-bold text-neutral-400 hover:text-white underline cursor-pointer">
+            Switch
+          </button>
+        </div>
+      `;
+    }
+
+    function renderChallenge() {
+      const activeChallenge = (state.challenges && state.challenges[0]) || {
+        question: 'When the whole world doubts your vision, what is your ultimate Sigma move?'
+      };
+      const qText = document.getElementById('challenge-question-text');
+      if (qText) qText.textContent = '“' + activeChallenge.question + '”';
+    }
+
+    function handlePostAnswer() {
+      const textInput = document.getElementById('answer-input');
+      const text = textInput ? textInput.value.trim() : '';
+      if (!text) {
+        alert('Please write your answer first.');
+        return;
+      }
+
+      const u = getCurrentUser();
+      if (!u) {
+        alert('Please select a user profile.');
+        return;
+      }
+
+      const activeChallenge = (state.challenges && state.challenges[0]) || { id: 'ch_default' };
+
+      // Check if already answered
+      const alreadyAnswered = (state.answers || []).some(a => a.user_id === u.id && a.challenge_id === activeChallenge.id);
+      if (alreadyAnswered) {
+        alert('Rule: You have already submitted an answer to this challenge.');
+        return;
+      }
+
+      const newAnswer = {
+        id: 'a_' + Date.now().toString(36),
+        user_id: u.id,
+        challenge_id: activeChallenge.id,
+        answer_text: text,
+        created_at: new Date().toISOString(),
+        profiles: u.profile
+      };
+
+      if (!state.answers) state.answers = [];
+      state.answers.unshift(newAnswer);
+
+      if (textInput) textInput.value = '';
+      saveState();
+      alert('Answer posted! You earned +10 PTS!');
+    }
+
+    function renderAnswers() {
+      const container = document.getElementById('answers-list');
+      const countEl = document.getElementById('answers-count');
+      if (!container) return;
+
+      const answers = state.answers || [];
+      const votes = state.votes || [];
+      const curUser = getCurrentUser();
+
+      if (countEl) countEl.textContent = answers.length;
+
+      if (!answers.length) {
+        container.innerHTML = `<div class="p-6 text-center text-xs text-neutral-500 bg-neutral-900/50 rounded-2xl border border-neutral-800">No answers posted yet. Be the first Sigma to answer!</div>`;
+        return;
+      }
+
+      container.innerHTML = answers.map(a => {
+        const prof = a.profiles || { username: 'Gladiator', country: 'Global', avatar_url: 'https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg' };
+        
+        // Count votes for this answer
+        const ansVotes = votes.filter(v => v.answer_id === a.id);
+        const sigmaCount = ansVotes.filter(v => v.vote_type === 'sigma').length;
+        const smartCount = ansVotes.filter(v => v.vote_type === 'smart').length;
+        const funnyCount = ansVotes.filter(v => v.vote_type === 'funny').length;
+        const totalScore = (sigmaCount * 3) + (smartCount * 2) + (funnyCount * 1);
+
+        // Check if current user voted on this answer
+        const userVote = ansVotes.find(v => v.user_id === (curUser ? curUser.id : null));
+        const userVoteType = userVote ? userVote.vote_type : null;
+        const isOwnAnswer = curUser && curUser.id === a.user_id;
+
+        return `
+          <div class="p-4 rounded-2xl bg-neutral-900 border border-neutral-800 space-y-3 shadow-md">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <img src="${prof.avatar_url || 'https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg'}" class="w-8 h-8 rounded-full object-cover border border-amber-400" />
+                <div>
+                  <div class="flex items-center gap-1.5">
+                    <span class="text-xs font-black text-white">@${prof.username}</span>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-neutral-800 text-neutral-400 font-semibold">${prof.country || 'Global'}</span>
+                  </div>
+                  <span class="text-[10px] text-neutral-500">Sigma Gladiator</span>
+                </div>
+              </div>
+              <span class="text-xs font-black text-amber-300 font-mono px-2 py-0.5 rounded-lg bg-neutral-950 border border-neutral-800">
+                ${totalScore} PTS
+              </span>
+            </div>
+
+            <p class="text-xs text-neutral-200 leading-relaxed pl-0.5">
+              "${a.answer_text}"
+            </p>
+
+            <div class="flex items-center justify-between pt-2 border-t border-neutral-800/80">
+              <div class="flex items-center gap-1.5">
+                <button
+                  onclick="handleVote('${a.id}', 'sigma')"
+                  ${isOwnAnswer ? 'disabled title="Cannot vote on your own answer"' : ''}
+                  class="px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer ${
+                    userVoteType === 'sigma' ? 'bg-amber-400 text-black shadow' : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
+                  } ${isOwnAnswer ? 'opacity-50 cursor-not-allowed' : ''}"
+                >
+                  <span>🔥</span>
+                  <span>${sigmaCount}</span>
+                </button>
+
+                <button
+                  onclick="handleVote('${a.id}', 'smart')"
+                  ${isOwnAnswer ? 'disabled title="Cannot vote on your own answer"' : ''}
+                  class="px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer ${
+                    userVoteType === 'smart' ? 'bg-amber-400 text-black shadow' : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
+                  } ${isOwnAnswer ? 'opacity-50 cursor-not-allowed' : ''}"
+                >
+                  <span>🧠</span>
+                  <span>${smartCount}</span>
+                </button>
+
+                <button
+                  onclick="handleVote('${a.id}', 'funny')"
+                  ${isOwnAnswer ? 'disabled title="Cannot vote on your own answer"' : ''}
+                  class="px-2.5 py-1 rounded-xl text-xs font-bold transition flex items-center gap-1 cursor-pointer ${
+                    userVoteType === 'funny' ? 'bg-amber-400 text-black shadow' : 'bg-neutral-800 text-neutral-300 hover:bg-neutral-700'
+                  } ${isOwnAnswer ? 'opacity-50 cursor-not-allowed' : ''}"
+                >
+                  <span>🤡</span>
+                  <span>${funnyCount}</span>
+                </button>
+              </div>
+
+              ${isOwnAnswer ? '<span class="text-[10px] text-neutral-500 italic">Your answer</span>' : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function handleVote(answerId, voteType) {
+      const curUser = getCurrentUser();
+      if (!curUser) {
+        alert('Please switch to an active user.');
+        return;
+      }
+
+      const answers = state.answers || [];
+      const targetAns = answers.find(a => a.id === answerId);
+      if (!targetAns) return;
+
+      if (targetAns.user_id === curUser.id) {
+        alert('Rule: You cannot vote on your own answer!');
+        return;
+      }
+
+      if (!state.votes) state.votes = [];
+      const votes = state.votes;
+
+      // Find all answer IDs in this challenge
+      const challengeAnswerIds = new Set(
+        answers.filter(a => a.challenge_id === targetAns.challenge_id).map(a => a.id)
+      );
+
+      // Rule: 1 vote per challenge per user
+      const existingVoteIdx = votes.findIndex(
+        v => v.user_id === curUser.id && challengeAnswerIds.has(v.answer_id)
+      );
+
+      if (existingVoteIdx !== -1) {
+        const prev = votes[existingVoteIdx];
+        if (prev.answer_id === answerId) {
+          if (prev.vote_type === voteType) {
+            // Remove vote
+            votes.splice(existingVoteIdx, 1);
+          } else {
+            // Toggle reaction
+            votes[existingVoteIdx].vote_type = voteType;
+          }
+        } else {
+          // Switch vote to this answer
+          votes[existingVoteIdx].answer_id = answerId;
+          votes[existingVoteIdx].vote_type = voteType;
+        }
+      } else {
+        votes.push({
+          id: 'v_' + Date.now().toString(36),
+          answer_id: answerId,
+          user_id: curUser.id,
+          vote_type: voteType
+        });
+      }
+
+      saveState();
+    }
+
+    function renderLeaderboard() {
+      const listEl = document.getElementById('leaderboard-list');
+      if (!listEl) return;
+
+      const users = state.users || [];
+      const answers = state.answers || [];
+      const votes = state.votes || [];
+
+      // Calculate score for each user
+      const answerOwner = {};
+      answers.forEach(a => { answerOwner[a.id] = a.user_id; });
+
+      const scores = {};
+      users.forEach(u => { scores[u.id] = { total: 0, sigma: 0, funny: 0, smart: 0 }; });
+
+      votes.forEach(v => {
+        const ownerId = answerOwner[v.answer_id];
+        if (ownerId && scores[ownerId]) {
+          if (v.vote_type === 'sigma') {
+            scores[ownerId].total += 3;
+            scores[ownerId].sigma += 1;
+          } else if (v.vote_type === 'smart') {
+            scores[ownerId].total += 2;
+            scores[ownerId].smart += 1;
+          } else {
+            scores[ownerId].total += 1;
+            scores[ownerId].funny += 1;
+          }
+        }
+      });
+
+      const ranked = users.map(u => ({
+        ...u,
+        totalScore: scores[u.id] ? scores[u.id].total : 0,
+        sigma: scores[u.id] ? scores[u.id].sigma : 0,
+        smart: scores[u.id] ? scores[u.id].smart : 0,
+        funny: scores[u.id] ? scores[u.id].funny : 0
+      })).sort((a, b) => b.totalScore - a.totalScore);
+
+      listEl.innerHTML = ranked.map((u, idx) => {
+        const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `#${idx + 1}`;
+        const prof = u.profile || { username: 'Gladiator', country: 'Global', avatar_url: 'https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg' };
+        return `
+          <div class="py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="w-8 text-center text-sm font-black ${idx < 3 ? 'text-xl' : 'text-neutral-400'}">${medal}</span>
+              <img src="${prof.avatar_url || 'https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg'}" class="w-8 h-8 rounded-full object-cover border border-amber-400" />
+              <div>
+                <span class="text-xs font-black text-white">@${prof.username}</span>
+                <span class="text-[10px] text-neutral-400 block">${prof.country || 'Global'}</span>
+              </div>
+            </div>
+            <div class="text-right">
+              <span class="text-sm font-black text-amber-400 font-mono">${u.totalScore} PTS</span>
+              <span class="text-[10px] text-neutral-500 block">🔥 ${u.sigma} • 🧠 ${u.smart} • 🤡 ${u.funny}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderProfile() {
+      const u = getCurrentUser();
+      if (!u) return;
+      const prof = u.profile || { username: 'Gladiator', country: 'Global', avatar_url: 'https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg' };
+
+      document.getElementById('profile-avatar').src = prof.avatar_url || 'https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg';
+      document.getElementById('profile-username').textContent = '@' + prof.username;
+      document.getElementById('profile-country').textContent = 'Country: ' + (prof.country || 'Global');
+
+      const isOwner = isCurrentUserOwner();
+      const roleBadge = document.getElementById('profile-role-badge');
+      if (roleBadge) {
+        roleBadge.textContent = isOwner ? '👑 MASTER OWNER' : '⚔️ GLADIATOR';
+        roleBadge.className = isOwner
+          ? 'inline-block mt-1 text-[10px] font-black uppercase px-2 py-0.5 rounded bg-amber-400 text-black'
+          : 'inline-block mt-1 text-[10px] font-black uppercase px-2 py-0.5 rounded bg-neutral-800 text-amber-300';
+      }
+
+      // Count answers
+      const answers = state.answers || [];
+      const userAnswers = answers.filter(a => a.user_id === u.id);
+      document.getElementById('profile-answers-count').textContent = userAnswers.length;
+
+      // Calculate score
+      const votes = state.votes || [];
+      const ansIds = new Set(userAnswers.map(a => a.id));
+      const myVotes = votes.filter(v => ansIds.has(v.answer_id));
+      const score = myVotes.reduce((sum, v) => {
+        if (v.vote_type === 'sigma') return sum + 3;
+        if (v.vote_type === 'smart') return sum + 2;
+        return sum + 1;
+      }, 0);
+      document.getElementById('profile-score').textContent = score;
+
+      // User switch select
+      const select = document.getElementById('user-switch-select');
+      if (select) {
+        select.innerHTML = (state.users || []).map(usr => {
+          const p = usr.profile || { username: 'Gladiator' };
+          const isOwn = (state.ownerEmails || []).map(e => e.toLowerCase()).includes((usr.email || '').toLowerCase());
+          return `<option value="${usr.id}" ${usr.id === currentUserId ? 'selected' : ''}>@${p.username} (${usr.email}) ${isOwn ? '👑 [Owner]' : ''}</option>`;
+        }).join('');
+      }
+    }
+
+    function handleSwitchUser(newId) {
+      currentUserId = newId;
+      saveState();
+    }
+
+    function renderOwnerPanel() {
+      // Co-Owners list
+      const coList = document.getElementById('coowners-list');
+      if (coList) {
+        coList.innerHTML = (state.ownerEmails || []).map(email => `
+          <div class="p-2 rounded-xl bg-neutral-950 border border-neutral-800 flex items-center justify-between text-xs">
+            <span class="font-mono text-amber-300">${email}</span>
+            ${email.toLowerCase() === MASTER_EMAIL ? '<span class="text-[10px] text-amber-400 font-bold">PRIMARY MASTER</span>' : `
+              <button onclick="handleRemoveCoOwner('${email}')" class="text-rose-400 hover:text-rose-300 text-xs font-bold cursor-pointer">
+                Remove
+              </button>
+            `}
+          </div>
+        `).join('');
+      }
+
+      // Users table with points modifier
+      const usersTable = document.getElementById('owner-users-table');
+      if (usersTable) {
+        usersTable.innerHTML = (state.users || []).map(u => {
+          const prof = u.profile || { username: 'User' };
+          return `
+            <div class="p-2.5 rounded-xl bg-neutral-950 border border-neutral-800 flex items-center justify-between text-xs">
+              <div>
+                <span class="font-black text-white">@${prof.username}</span>
+                <span class="text-[10px] text-neutral-400 block font-mono">${u.email}</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button onclick="modifyUserPoints('${u.id}', 50)" class="px-2 py-1 rounded bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-[11px] cursor-pointer">
+                  +50 PTS
+                </button>
+                <button onclick="modifyUserPoints('${u.id}', -50)" class="px-2 py-1 rounded bg-rose-600 hover:bg-rose-500 text-white font-bold text-[11px] cursor-pointer">
+                  -50 PTS
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Populate winner select preset
+      const winSelect = document.getElementById('winner-select-user');
+      if (winSelect) {
+        winSelect.innerHTML = '<option value="">-- Choose registered user --</option>' +
+          (state.users || []).map(u => {
+            const p = u.profile || { username: 'User' };
+            return `<option value="${u.id}">@${p.username}</option>`;
+          }).join('');
+      }
+
+      // Populate challenge editor
+      const qInput = document.getElementById('edit-challenge-text');
+      const activeChallenge = (state.challenges && state.challenges[0]) || {};
+      if (qInput && !qInput.value) {
+        qInput.value = activeChallenge.question || '';
+      }
+
+      // Populate winner fields with current winner
+      const curWin = state.dailyWinner || {};
+      const winName = document.getElementById('winner-name');
+      const winUser = document.getElementById('winner-username');
+      const winScore = document.getElementById('winner-score');
+      const winImg = document.getElementById('winner-image');
+      const winQuote = document.getElementById('winner-quote');
+
+      if (winName && !winName.value) winName.value = curWin.display_name || 'Shadow';
+      if (winUser && !winUser.value) winUser.value = curWin.username || 'shadow_sigma';
+      if (winScore && !winScore.value) winScore.value = curWin.score || 9842;
+      if (winImg && !winImg.value) winImg.value = curWin.avatar_url || 'https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg';
+      if (winQuote && !winQuote.value) winQuote.value = curWin.winning_answer || 'I do not chase opportunities... opportunities chase me.';
+    }
+
+    function modifyUserPoints(userId, delta) {
+      // Find or create an answer for user to attach points
+      if (!state.answers) state.answers = [];
+      let userAns = state.answers.find(a => a.user_id === userId);
+      const activeChallenge = (state.challenges && state.challenges[0]) || { id: 'ch_default' };
+
+      if (!userAns) {
+        const u = (state.users || []).find(usr => usr.id === userId);
+        userAns = {
+          id: 'a_boost_' + Date.now().toString(36),
+          user_id: userId,
+          challenge_id: activeChallenge.id,
+          answer_text: 'Sigma owner recognition vote.',
+          created_at: new Date().toISOString(),
+          profiles: u ? u.profile : {}
+        };
+        state.answers.push(userAns);
+      }
+
+      if (!state.votes) state.votes = [];
+      const count = Math.abs(Math.round(delta / 3));
+      for (let i = 0; i < count; i++) {
+        if (delta > 0) {
+          state.votes.push({
+            id: 'v_b_' + Date.now().toString(36) + i,
+            answer_id: userAns.id,
+            user_id: 'u_owner_boost',
+            vote_type: 'sigma'
+          });
+        } else if (state.votes.length > 0) {
+          const idx = state.votes.findIndex(v => v.answer_id === userAns.id);
+          if (idx !== -1) state.votes.splice(idx, 1);
+        }
+      }
+
+      saveState();
+      alert(`Points modified by ${delta > 0 ? '+' : ''}${delta} PTS!`);
+    }
+
+    function handleAddCoOwner() {
+      const emailInput = document.getElementById('new-coowner-email');
+      const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+      if (!email || !email.includes('@')) {
+        alert('Please enter a valid email address.');
+        return;
+      }
+      if (!state.ownerEmails) state.ownerEmails = [MASTER_EMAIL];
+      if (!state.ownerEmails.includes(email)) {
+        state.ownerEmails.push(email);
+        if (emailInput) emailInput.value = '';
+        saveState();
+        alert('Co-Owner added!');
+      }
+    }
+
+    function handleRemoveCoOwner(email) {
+      if (email.toLowerCase() === MASTER_EMAIL) {
+        alert('Master Owner cannot be removed.');
+        return;
+      }
+      state.ownerEmails = (state.ownerEmails || []).filter(e => e.toLowerCase() !== email.toLowerCase());
+      saveState();
+    }
+
+    function handleSaveChallenge() {
+      const text = document.getElementById('edit-challenge-text').value.trim();
+      if (!text) {
+        alert('Question cannot be empty.');
+        return;
+      }
+      if (!state.challenges) state.challenges = [];
+      state.challenges[0] = {
+        id: 'ch_' + Date.now().toString(36),
+        question: text,
+        topic: 'Daily Sigma Arena Challenge',
+        created_at: new Date().toISOString(),
+        expires_at: new Date(Date.now() + 86400000).toISOString()
+      };
+      saveState();
+      alert('New Daily Challenge Question published!');
+    }
+
+    function handleSelectWinnerPreset(userId) {
+      if (!userId) return;
+      const u = (state.users || []).find(usr => usr.id === userId);
+      if (!u) return;
+      const prof = u.profile || {};
+      document.getElementById('winner-name').value = prof.username || 'User';
+      document.getElementById('winner-username').value = prof.username || 'user';
+      document.getElementById('winner-image').value = prof.avatar_url || 'https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg';
+    }
+
+    function handleSaveWinner() {
+      const name = document.getElementById('winner-name').value.trim();
+      const username = document.getElementById('winner-username').value.trim();
+      const score = Number(document.getElementById('winner-score').value) || 9842;
+      const img = document.getElementById('winner-image').value.trim() || 'https://i.ibb.co/prnXzb0F/Fs-Z7-EXg-AAy-EW0.jpg';
+      const quote = document.getElementById('winner-quote').value.trim() || 'I do not chase opportunities... opportunities chase me.';
+
+      state.dailyWinner = {
+        id: 'win_' + Date.now().toString(36),
+        display_name: name,
+        username: username,
+        score: score,
+        avatar_url: img,
+        winning_answer: quote,
+        sigmaVotes: Math.round(score * 0.4),
+        smartVotes: Math.round(score * 0.3),
+        funnyVotes: Math.round(score * 0.2),
+        announced_at: new Date().toISOString()
+      };
+
+      saveState();
+      alert('12:00 AM Midnight Winner saved! Launching ceremony preview...');
+      openCeremony();
+    }
+
+    // -------------------------------------------------------------
+    // 6. TAB NAVIGATION
+    // -------------------------------------------------------------
+    function switchTab(tab) {
+      const tabs = ['arena', 'leaderboard', 'profile', 'owner'];
+      tabs.forEach(t => {
+        const view = document.getElementById('tab-view-' + t);
+        const btn = document.getElementById('tab-btn-' + t);
+        if (view) {
+          if (t === tab) view.classList.remove('hidden');
+          else view.classList.add('hidden');
+        }
+        if (btn) {
+          if (t === tab) {
+            btn.className = 'py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition bg-amber-400 text-black shadow-md';
+          } else {
+            btn.className = 'py-2.5 rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 transition text-neutral-400 hover:text-white';
+          }
+        }
+      });
+    }
+
+    function switchOwnerSubtab(sub) {
+      const subs = ['users', 'coowners', 'challenge', 'winner'];
+      subs.forEach(s => {
+        const panel = document.getElementById('owner-panel-' + s);
+        const btn = document.getElementById('owner-subtab-' + s);
+        if (panel) {
+          if (s === sub) panel.classList.remove('hidden');
+          else panel.classList.add('hidden');
+        }
+        if (btn) {
+          if (s === sub) {
+            btn.className = 'py-1.5 rounded-lg bg-amber-400 text-black shadow';
+          } else {
+            btn.className = 'py-1.5 rounded-lg text-neutral-400 hover:text-white';
+          }
+        }
+      });
+    }
+
+    // -------------------------------------------------------------
+    // 7. BOOTSTRAP INITIALIZATION
+    // -------------------------------------------------------------
+    switchTab('arena');
+    renderAll();
+    setInterval(updateMidnightBanner, 1000);
+  </script>
+</body>
+</html>
